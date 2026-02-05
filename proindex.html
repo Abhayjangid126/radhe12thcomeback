@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Exam Tracker 2026</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --glass: rgba(30, 41, 59, 0.7);
+            --accent: #38bdf8;
+            --physics: #fbbf24;
+            --maths: #f472b6;
+            --chem: #34d399;
+            --text: #f1f5f9;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            width: 100%;
+            max-width: 850px;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+
+        .stats-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        
+        .progress-container { width: 100%; height: 10px; background: #334155; border-radius: 5px; overflow: hidden; }
+        #progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #38bdf8, #818cf8); transition: width 0.5s ease; }
+
+        .countdown { font-size: 0.9rem; font-weight: bold; color: var(--accent); }
+
+        .filters { display: flex; gap: 10px; margin-top: 15px; }
+        .filter-btn { 
+            padding: 6px 12px; border-radius: 20px; border: none; cursor: pointer; 
+            background: #334155; color: white; font-size: 0.8rem; transition: 0.3s;
+        }
+        .filter-btn.active { background: var(--accent); color: #000; font-weight: bold; }
+
+        .container { width: 100%; max-width: 850px; }
+
+        .day-card { 
+            background: var(--glass); border-radius: 16px; padding: 20px; margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05); transition: transform 0.2s;
+        }
+        .day-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+
+        .date-label { font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; display: flex; justify-content: space-between; }
+        
+        .task-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+
+        .task-item { 
+            background: rgba(255,255,255,0.03); padding: 12px; border-radius: 10px; 
+            border-left: 4px solid #475569; position: relative;
+        }
+        .task-item.phy { border-left-color: var(--physics); }
+        .task-item.math { border-left-color: var(--maths); }
+        .task-item.chem { border-left-color: var(--chem); }
+
+        label { display: flex; align-items: center; cursor: pointer; font-size: 0.9rem; line-height: 1.4; }
+        input[type="checkbox"] { margin-right: 12px; width: 18px; height: 18px; accent-color: var(--accent); }
+        input:checked + span { text-decoration: line-through; opacity: 0.5; }
+
+        .busy-text { color: #94a3b8; font-style: italic; }
+        .badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; margin-bottom: 5px; display: inline-block; background: rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="stats-row">
+            <div>
+                <h2 style="margin:0; font-size: 1.4rem;">🎯 Study Dashboard</h2>
+                <div id="countdown-text" class="countdown">Calculating...</div>
+            </div>
+            <div style="text-align: right;">
+                <span id="progress-percent">0%</span> Complete
+            </div>
+        </div>
+        <div class="progress-container"><div id="progress-bar"></div></div>
+        
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterTasks('all')">All</button>
+            <button class="filter-btn" onclick="filterTasks('phy')">Physics</button>
+            <button class="filter-btn" onclick="filterTasks('math')">Maths</button>
+            <button class="filter-btn" onclick="filterTasks('chem')">Chemistry</button>
+        </div>
+    </header>
+
+    <div class="container" id="tracker"></div>
+
+    <script>
+        const physics = ["Units & Measurements", "Motion: Straight Line", "Motion: Plane", "Laws of Motion", "Work, Energy, Power", "Rotational Motion", "Gravitation", "Solid Properties", "Fluid Properties", "Thermal Properties", "Thermodynamics (P)", "Oscillations", "Waves"];
+        const maths = ["Sets", "Relations & Functions", "Trig Functions", "Linear Inequalities", "Permutations & Combos", "Sequences & Series", "Straight Lines", "Conic Sections", "3D Geometry", "Limits & Derivatives", "Probability"];
+        const chem = ["Mole Concept", "Atomic Structure", "Periodicity", "Chemical Bonding", "Thermodynamics (C)", "Equilibrium", "Redox Reactions", "GOC", "Hydrocarbons"];
+
+        let masterList = [];
+        const max = Math.max(physics.length, maths.length, chem.length);
+        for(let i=0; i<max; i++){
+            if(physics[i]) masterList.push({sub: 'phy', name: physics[i]});
+            if(maths[i]) masterList.push({sub: 'math', name: maths[i]});
+            if(chem[i]) masterList.push({sub: 'chem', name: chem[i]});
+        }
+
+        // UPDATED DATES
+        const start = new Date(2026, 1, 4); // Feb 4, 2026
+        const end = new Date(2026, 2, 1);   // Mar 1, 2026
+        const busy = []; // Cleared busy days
+
+        function renderTracker() {
+            const container = document.getElementById('tracker');
+            let html = '';
+            let currentIdx = 0;
+
+            for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+                const dateStr = d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
+                
+                html += `<div class="day-card" data-date="${d.getTime()}">
+                    <div class="date-label"><span>${dateStr}</span></div>
+                    <div class="task-grid">`;
+
+                // Logic: 2 Chapters per day until masterList is exhausted
+                if(currentIdx < masterList.length) {
+                    for(let i=0; i<2; i++) {
+                        let ch = masterList[currentIdx++];
+                        if(ch) {
+                            html += createBox(ch, 1, d.getTime());
+                            html += createBox(ch, 2, d.getTime());
+                        }
+                    }
+                } else {
+                    html += `<p class="busy-text">🚀 Revision & Mock Tests</p>`;
+                }
+                html += `</div></div>`;
+            }
+            container.innerHTML = html;
+            loadProgress();
+            updateStats();
+        }
+
+        function createBox(ch, type, dateId) {
+            const id = `task-${ch.sub}-${ch.name.replace(/\s/g,'')}-${type}`;
+            const label = type === 1 ? ch.name : `Solve: ${ch.name}`;
+            return `<div class="task-item ${ch.sub}" data-sub="${ch.sub}">
+                <label>
+                    <input type="checkbox" id="${id}" onclick="saveProgress()">
+                    <span>${label}</span>
+                </label>
+            </div>`;
+        }
+
+        function saveProgress() {
+            const checks = document.querySelectorAll('input[type="checkbox"]');
+            const data = {};
+            checks.forEach(c => data[c.id] = c.checked);
+            localStorage.setItem('examProgress2026', JSON.stringify(data));
+            updateStats();
+        }
+
+        function loadProgress() {
+            const data = JSON.parse(localStorage.getItem('examProgress2026') || '{}');
+            Object.keys(data).forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.checked = data[id];
+            });
+        }
+
+        function updateStats() {
+            const total = document.querySelectorAll('input[type="checkbox"]').length;
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            const percent = total === 0 ? 0 : Math.round((checked/total)*100);
+            
+            document.getElementById('progress-bar').style.width = percent + '%';
+            document.getElementById('progress-percent').innerText = percent + '%';
+
+            const diff = new Date(2026, 2, 1) - new Date();
+            const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+            document.getElementById('countdown-text').innerText = days > 0 ? `${days} Days to Exam` : "It's Exam Day!";
+        }
+
+        function filterTasks(sub) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            if(event) event.target.classList.add('active');
+            
+            document.querySelectorAll('.task-item').forEach(item => {
+                if(sub === 'all' || item.dataset.sub === sub) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        renderTracker();
+    </script>
+</body>
+</html>
