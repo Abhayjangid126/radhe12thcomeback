@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12th Board Warrior</title>
+    <style>
+        :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --phy: #fbbf24; --bio: #2ecc71; --chem: #e74c3c; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; padding: 10px; margin: 0; }
+        header { text-align: center; padding: 20px; background: var(--card); border-radius: 0 0 20px 20px; margin-bottom: 20px; border-bottom: 3px solid var(--accent); }
+        .day-card { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 12px; border-left: 6px solid #475569; }
+        .date-title { color: var(--accent); font-weight: bold; font-size: 1.1rem; border-bottom: 1px solid #334155; margin-bottom: 10px; padding-bottom: 5px; }
+        .task { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; }
+        input[type="checkbox"] { width: 22px; height: 22px; margin-right: 12px; accent-color: var(--accent); cursor: pointer; }
+        /* Tick hone par text thoda light ho jayega */
+        input:checked + span { opacity: 0.5; text-decoration: line-through; }
+        .exam { background: #334155; border: 2px dashed var(--accent); text-align: center; color: #fbbf24; font-weight: bold; }
+        .tag { font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; margin-right: 8px; font-weight: bold; }
+        .p-tag { background: var(--phy); color: black; }
+        .b-tag { background: var(--bio); color: black; }
+        .c-tag { background: var(--chem); color: white; }
+    </style>
+</head>
+<body>
+    <header>
+        <h2 style="margin:0">🎯 Final Revision 2026</h2>
+        <p style="font-size:0.8rem; opacity:0.8">Data automatically saves in your phone</p>
+    </header>
+
+    <div id="schedule">
+        <div class="day-card" style="border-color: var(--phy)">
+            <div class="date-title">06 Feb (Friday)</div>
+            <div class="task"><input type="checkbox" id="task1"> <span><b class="tag p-tag">PHY</b> Ray Optics (Full)</span></div>
+            <div class="task"><input type="checkbox" id="task2"> <span><b class="tag p-tag">PHY</b> Wave Optics</span></div>
+        </div>
+
+        <div class="day-card" style="border-color: var(--phy)">
+            <div class="date-title">07 Feb (Saturday)</div>
+            <div class="task"><input type="checkbox" id="task3"> <span><b class="tag p-tag">PHY</b> Electric Charges & Fields</span></div>
+            <div class="task"><input type="checkbox" id="task4"> <span><b class="tag p-tag">PHY</b> Electrostatic Potential</span></div>
+        </div>
+
+        <div class="day-card" style="border-color: var(--phy)">
+            <div class="date-title">08 Feb (Sunday)</div>
+            <div class="task"><input type="checkbox" id="task5"> <span><b class="tag p-tag">PHY</b> Current Electricity</span></div>
+            <div class="task"><input type="checkbox" id="task6"> <span><b class="tag p-tag">PHY</b> Moving Charges & Magnetism</span></div>
+        </div>
+
+        <div class="day-card" style="border-color: var(--phy)">
+            <div class="date-title">09 Feb (Monday)</div>
+            <div class="task"><input type="checkbox" id="task7"> <span><b class="tag p-tag">PHY</b> EMI & Alternating Current</span></div>
+            <div class="task"><input type="checkbox" id="task8"> <span><b class="tag p-tag">PHY</b> Dual Nature of Radiation</span></div>
+        </div>
+
+        <div class="day-card" style="border-color: var(--phy)">
+            <div class="date-title">10 Feb (Tuesday)</div>
+            <div class="task"><input type="checkbox" id="task9"> <span><b class="tag p-tag">PHY</b> Atoms & Semiconductors</span></div>
+            <div class="task"><input type="checkbox" id="task10"> <span><b class="tag p-tag">PHY</b> Formulas Revision</span></div>
+        </div>
+
+        <div class="day-card" style="border-color: #fff">
+            <div class="date-title">11-12 Feb</div>
+            <div class="task"><input type="checkbox" id="task11"> <span>Focus on <b>English</b> (Literature & Writing)</span></div>
+        </div>
+
+        <div class="day-card exam">📅 13 FEB: ENGLISH EXAM</div>
+
+        <div class="day-card" style="border-color: var(--phy)">
+            <div class="date-title">14-15 Feb (Mission Physics)</div>
+            <div class="task"><input type="checkbox" id="task12"> <span>Derivations & Diagrams (Optics + Electro)</span></div>
+            <div class="task"><input type="checkbox" id="task13"> <span>Solve 2 Sample Papers (2024 & 2025)</span></div>
+        </div>
+
+        <div class="day-card exam">⚡ 16 FEB: PHYSICS EXAM</div>
+
+        <div class="day-card">
+            <div class="date-title">17-19 Feb (Hindi Grind)</div>
+            <div class="task"><input type="checkbox" id="task14"> <span>Vyakaran, Sahitya & Letter Writing</span></div>
+        </div>
+
+        <div class="day-card exam">📖 20 FEB: HINDI EXAM</div>
+
+        <div class="day-card" style="border-color: var(--bio)">
+            <div class="date-title">21 Feb (Saturday)</div>
+            <div class="task"><input type="checkbox" id="task15"> <span><b class="tag b-tag">BIO</b> Sexual Reproduction in Plants</span></div>
+            <div class="task"><input type="checkbox" id="task16"> <span><b class="tag b-tag">BIO</b> Human Reproduction</span></div>
+        </div>
+
+        <div class="day-card" style="border-color: var(--chem)">
+            <div class="date-title">22 Feb (Sunday)</div>
+            <div class="task"><input type="checkbox" id="task17"> <span><b class="tag b-tag">BIO</b> Reproductive Health</span></div>
+            <div class="task"><input type="checkbox" id="task18"> <span><b class="tag c-tag">CHEM</b> Solutions (Numericals)</span></div>
+        </div>
+
+        <div class="day-card" style="border-color: var(--bio)">
+            <div class="date-title">23 Feb (Monday)</div>
+            <div class="task"><input type="checkbox" id="task19"> <span><b class="tag b-tag">BIO</b> Principles of Inheritance</span></div>
+            <div class="task"><input type="checkbox" id="task20"> <span><b class="tag b-tag">BIO</b> Molecular Basis of Inheritance</span></div>
+        </div>
+
+        <div class="day-card" style="border-color: var(--chem)">
+            <div class="date-title">24 Feb (Tuesday)</div>
+            <div class="task"><input type="checkbox" id="task21"> <span><b class="tag b-tag">BIO</b> Evolution</span></div>
+            <div class="task"><input type="checkbox" id="task22"> <span><b class="tag c-tag">CHEM</b> Electrochemistry</span></div>
+        </div>
+
+        <div class="day-card" style="border-color: var(--bio)">
+            <div class="date-title">25 Feb (Wednesday)</div>
+            <div class="task"><input type="checkbox" id="task23"> <span><b class="tag b-tag">BIO</b> Human Health & Disease</span></div>
+            <div class="task"><input type="checkbox" id="task24"> <span><b class="tag b-tag">BIO</b> Microbes in Welfare</span></div>
+        </div>
+
+        <div class="day-card" style="border-color: var(--chem)">
+            <div class="date-title">26 Feb (Thursday)</div>
+            <div class="task"><input type="checkbox" id="task25"> <span><b class="tag b-tag">BIO</b> Biotechnology (Both Chapters)</span></div>
+            <div class="task"><input type="checkbox" id="task26"> <span><b class="tag c-tag">CHEM</b> Chemical Kinetics</span></div>
+        </div>
+
+        <div class="day-card" style="border-color: var(--bio)">
+            <div class="date-title">27 Feb (Friday)</div>
+            <div class="task"><input type="checkbox" id="task27"> <span><b class="tag b-tag">BIO</b> Ecology (Full Unit)</span></div>
+            <div class="task"><input type="checkbox" id="task28"> <span><b class="tag b-tag">BIO</b> Full Diagrams Revision</span></div>
+        </div>
+
+        <div class="day-card exam">🧬 28 FEB: BIOLOGY EXAM</div>
+
+        <div class="day-card" style="border-color: var(--chem)">
+            <div class="date-title">01-03 March (Chem Final)</div>
+            <div class="task"><input type="checkbox" id="task29"> <span><b class="tag c-tag">CHEM</b> Organic (Haloalkanes to Amines)</span></div>
+            <div class="task"><input type="checkbox" id="task30"> <span><b class="tag c-tag">CHEM</b> Inorganic (d-f block & Coordination)</span></div>
+            <div class="task"><input type="checkbox" id="task31"> <span><b class="tag c-tag">CHEM</b> Biomolecules & Name Reactions</span></div>
+        </div>
+
+        <div class="day-card exam">🧪 04 MAR: CHEMISTRY EXAM</div>
+    </div>
+
+    <script>
+        // Data save karne ka function
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        
+        checkboxes.forEach(cb => {
+            // Load saved state
+            const savedState = localStorage.getItem(cb.id);
+            if (savedState === "true") {
+                cb.checked = true;
+            }
+
+            // Save on click
+            cb.addEventListener('change', () => {
+                localStorage.setItem(cb.id, cb.checked);
+            });
+        });
+    </script>
+</body>
+</html>
